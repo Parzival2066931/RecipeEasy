@@ -5,24 +5,13 @@ import { SubmitButton } from './SubmitButton';
 
 
 
-export function LoginForm({navigation, route}) {
-
-  const [display, setDisplay] = useState({
-    username: '',
-    password: '',
-  })
-
-  function handleLogin() {
-    // navigation.navigate('')
-    {/* Quand mes chemin auront une séquence*/}
-  }
+export function LoginForm() {
   return(
     <View style={styles.container}>
-      {/* Maj props dans field */}
-      <Field label='Username' value={ display.username } onChangeText={ (user) => setDisplay({...display, username: user}) }/> 
-      <Field label='Password'value={ display.password }/>
+      <Field label='Username'/> 
+      <Field label='Password'/>
       <View style={{alignItems: 'center'}}>
-        <SubmitButton label='Login' onPress={ handleLogin }/>
+        <SubmitButton label='Login'/>
       </View>
       <View style={{alignItems: 'center'}}>
         <Text onPress='' style={styles.link}>Sign up!</Text>

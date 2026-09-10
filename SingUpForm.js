@@ -4,7 +4,7 @@ import { SubmitButton } from './SubmitButton';
 
 
 
-export function SignUpForm({navigation, route}) {
+export function SignUpForm() {
 
   return(
     <View style={styles.container}>
