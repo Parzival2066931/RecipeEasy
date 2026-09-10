@@ -1,6 +1,7 @@
 import { StyleSheet, Text, Pressable, View } from 'react-native';
-import { Field } from './Field';
-import { SubmitButton } from './SubmitButton';
+import { useState } from 'react';
+import { Field } from '../components/Field';
+import { SubmitButton } from '../components/SubmitButton';
 
 
 
@@ -12,20 +13,23 @@ export function LoginForm({navigation, route}) {
     password: '',
   })
 
+  function handleSignUp() {
+    navigation.navigate('SignUpForm')
+  }
+
   function handleLogin() {
-    // navigation.navigate('')
-    {/* Quand mes chemin auront une séquence*/}
+    navigation.navigate('RecipeList')
   }
   return(
     <View style={styles.container}>
       {/* Maj props dans field */}
       <Field label='Username' value={ display.username } onChangeText={ (user) => setDisplay({...display, username: user}) }/> 
-      <Field label='Password'value={ display.password }/>
+      <Field label='Password' value={ display.password } onChangeText={ (pw) => setDisplay({...display, password: pw}) }/>
       <View style={{alignItems: 'center'}}>
         <SubmitButton label='Login' onPress={ handleLogin }/>
       </View>
       <View style={{alignItems: 'center'}}>
-        <Text onPress='' style={styles.link}>Sign up!</Text>
+        <Text onPress={handleSignUp} style={styles.link}>Sign up!</Text>
       </View>
       
     </View>

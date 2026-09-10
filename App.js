@@ -1,27 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TextInput, Button, View, Pressable } from 'react-native';
+import { useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { LoginForm } from './LoginForm';
-import { SignUpForm } from './SingUpForm';
-import { RecipeForm } from './RecipeForm';
-// function renderFields(array){
-//   return array.map( f=> <Field label={f} key={f.downcase} />)
-// }
+import { LoginForm } from './forms/LoginForm';
+import { SignUpForm } from './forms/SingUpForm';
+import { RecipeForm } from './forms/RecipeForm';
+import { RecipeList } from './forms/RecipeList';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+    return (
+        <>
+            <StatusBar style="light" />
 
-  return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        {/* <LoginForm/> */}
-        {/* <SignUpForm/> */}
-        <RecipeForm/>
-      </SafeAreaView>
-    </SafeAreaProvider>
-    
-  );
+            <View style={{ flex: 1, backgroundColor: 'red' }}>
+            {/* View wrapper si backgroundColor dans les components enfants */}
+                <NavigationContainer>
+                    <Stack.Navigator 
+                        initialRouteName="RecipeList"
+                        screenOptions={{
+                            headerStyle: {
+                                backgroundColor: '#3d1878'
+                            },
+                            headerTintColor: 'white',
+                        }}
+                    >
+
+                        <Stack.Screen
+                            name="LoginForm"
+                            component={ LoginForm }
+                            options={{ title: 'Login' }}
+                        />
+
+                        <Stack.Screen
+                            name="SignUpForm"
+                            component={ SignUpForm }
+                            options={{ title: 'SingUp' }}
+                        />
+
+                        <Stack.Screen
+                            name="RecipeForm"
+                            component={ RecipeForm }
+                            options={{ title: 'Recipe' }}
+                        />
+
+                        <Stack.Screen
+                            name="RecipeList"
+                            component={ RecipeList }
+                            options={{ title: 'Recipes' }}
+                        />
+
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </View>
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -31,7 +67,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#367e7f',
+    backgroundColor: '#487c7e',
   },
   text: {
     fontSize: 18,

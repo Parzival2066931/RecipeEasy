@@ -1,15 +1,15 @@
 import { StyleSheet, Text, Pressable, View } from 'react-native';
 import { RadioButton, RadioGroup } from 'react-native-radio-buttons-group';
-import { Field } from './Field';
-import { CustomPicker } from './CustomPicker';
+import { Field } from '../components/Field';
+import { CustomPicker } from '../components/CustomPicker';
 import { useState } from "react";
-import { SubmitButton } from './SubmitButton';
+import { SubmitButton } from '../components/SubmitButton';
 
 export function RecipeForm({navigation, route}) {
   const [hours, setHours] = useState(0);
-  const hourValues = [...Array(24).keys()];
+  const hourValues = [...Array(13).keys()];
   const [minutes, setMinutes] = useState(0);
-  const minuteValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+  const minuteValues = [...Array(60).keys()];
   const categories = [
     {
       id: '1',
