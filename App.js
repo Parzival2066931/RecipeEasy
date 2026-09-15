@@ -20,7 +20,7 @@ export default function App() {
             {/* View wrapper si backgroundColor dans les components enfants */}
                 <NavigationContainer>
                     <Stack.Navigator 
-                        initialRouteName="RecipeList"
+                        initialRouteName="LoginForm"
                         screenOptions={{
                             headerStyle: {
                                 backgroundColor: '#3d1878'

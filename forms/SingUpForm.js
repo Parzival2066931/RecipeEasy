@@ -13,7 +13,7 @@ export function SignUpForm({navigation, route}) {
   })
 
   function handleSingUp() {
-
+    navigation.navigate("RecipeList")
   }
 
   return(
