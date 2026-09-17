@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     return (
         <>
-            <StatusBar style="light" />
+            <StatusBar style="light"/>
 
             <View style={{ flex: 1, backgroundColor: 'red' }}>
             {/* View wrapper si backgroundColor dans les components enfants */}
@@ -26,6 +26,8 @@ export default function App() {
                                 backgroundColor: '#3d1878'
                             },
                             headerTintColor: 'white',
+                            
+
                         }}
                     >
 
@@ -38,7 +40,7 @@ export default function App() {
                         <Stack.Screen
                             name="SignUpForm"
                             component={ SignUpForm }
-                            options={{ title: 'SingUp' }}
+                            options={{ title: 'SignUp' }}
                         />
 
                         <Stack.Screen
@@ -50,7 +52,15 @@ export default function App() {
                         <Stack.Screen
                             name="RecipeList"
                             component={ RecipeList }
-                            options={{ title: 'Recipes' }}
+                            options={{ 
+                                title: 'Recipes',
+                                headerRight: () => 
+                                    <Pressable onPress=''>
+                                        <Text style={styles.text}>Logout</Text>
+                                    </Pressable>
+                                ,
+                                
+                            }}
                         />
 
                     </Stack.Navigator>
@@ -71,5 +81,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+    color: 'white'
   },
 });
