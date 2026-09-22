@@ -54,14 +54,9 @@ export default function App() {
                             component={ RecipeList }
                             options={{ 
                                 title: 'Recipes',
-                                headerRight: () => 
-                                    <Pressable onPress=''>
-                                        <Text style={styles.text}>Logout</Text>
-                                    </Pressable>
-                                ,
-                                
                             }}
                         />
+
 
                     </Stack.Navigator>
                 </NavigationContainer>

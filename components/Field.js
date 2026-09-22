@@ -1,15 +1,17 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 
-export function Field({ label, style, multiline }) {
+export function Field(props) {
   return (
-    <View style={style}>
+    <View style={props.style}>
       <TextInput
-        placeholder={label}
+        placeholder={props.label}
         placeholderTextColor="white"
-        multiline={multiline}
+        value={props.value}
+        onChangeText={props.onChangeText}
+        multiline={props.multiline}
         style={[
           styles.input,
-          multiline && styles.multiline
+          props.multiline && styles.multiline
         ]}
       />
     </View>

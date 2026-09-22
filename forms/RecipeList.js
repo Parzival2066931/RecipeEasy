@@ -1,10 +1,47 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SubmitButton } from '../components/SubmitButton';
+import { useEffect, useState  } from 'react';
+import { LoginForm } from './LoginForm';
 
 
 
 
 export function RecipeList({navigation, route}) {
+  const [recipes, setRecipes] = useState([])
+
+  const display = route.params
+
+  const recipe = {
+    category: display?.category,
+    name: display?.name,
+    durationHours: display?.hours,
+    durationMinutes: display?.minutes,
+    description: display?.description
+  }
+
+  
+  useEffect(() => {
+      console.log(display)
+      if (display) {
+        console.log(recipe)
+        setRecipes((recipes) => [...recipes, recipe ])
+      }
+  }, [display])
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => 
+        <SubmitButton label='Logout' style={styles.logout} onPress={() => navigation.popTo('LoginForm')}/>
+    })
+  }, [])
+
+
+  function list() {
+    return (
+      <Text style={ styles.text }>{ JSON.stringify(recipes) }</Text>
+    )
+  }
+
 
   function handleAddRecipe() {
     navigation.navigate('RecipeForm')
@@ -12,7 +49,7 @@ export function RecipeList({navigation, route}) {
   return(
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>No recipes yet...</Text>
+        { list() }
       </View>
 
       <View style={styles.buttonContainer}>
@@ -65,5 +102,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20,
+  },
+
+  logout: {
+    backgroundColor: 'none',
+
   },
 });
