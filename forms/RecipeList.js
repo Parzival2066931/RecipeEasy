@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { BackHandler, StyleSheet, Text, View } from 'react-native';
 import { SubmitButton } from '../components/SubmitButton';
 import { useEffect, useState  } from 'react';
 import { LoginForm } from './LoginForm';
@@ -7,12 +7,13 @@ import { LoginForm } from './LoginForm';
 
 
 export function RecipeList({navigation, route}) {
+
   const [recipes, setRecipes] = useState([])
 
   const display = route.params
 
   const recipe = {
-    category: display?.category,
+    category: display?.categorie,
     name: display?.name,
     durationHours: display?.hours,
     durationMinutes: display?.minutes,
@@ -21,38 +22,48 @@ export function RecipeList({navigation, route}) {
 
   
   useEffect(() => {
-      console.log(display)
-      if (display) {
-        console.log(recipe)
-        setRecipes((recipes) => [...recipes, recipe ])
-      }
-  }, [display])
+    if (display) {
+      setRecipes((previousRecipes) => [...previousRecipes, recipe].sort((a, b) => a.name.localeCompare(b.name)));
+    }
+  }, [display]);
 
   useEffect(() => {
     navigation.setOptions({
+      headerBackVisible: false,
+      headerLeft: () => null,
       headerRight: () => 
-        <SubmitButton label='Logout' style={styles.logout} onPress={() => navigation.popTo('LoginForm')}/>
+        <SubmitButton label='Log out' style={styles.logout} onPress={() => navigation.popTo('LoginForm')}/>
     })
   }, [])
 
 
   function list() {
     return (
-      <Text style={ styles.text }>{ JSON.stringify(recipes) }</Text>
+      <Text style={ styles.text }>
+        { JSON.stringify(recipes) }
+      </Text>
     )
   }
-
+  function handleUpdateRecipe() {
+    let randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+    navigation.navigate('RecipeForm', randomRecipe)
+  }
 
   function handleAddRecipe() {
     navigation.navigate('RecipeForm')
   }
   return(
-    <View style={styles.container}>
+    <View style={[styles.container,]}>
       <View style={styles.content}>
         { list() }
       </View>
 
       <View style={styles.buttonContainer}>
+        <SubmitButton
+          textStyle={styles.buttonText}
+          label="View"
+          onPress={handleUpdateRecipe}
+        />
         <SubmitButton
           style={styles.button}
           textStyle={styles.buttonText}
@@ -105,7 +116,7 @@ const styles = StyleSheet.create({
   },
 
   logout: {
-    backgroundColor: 'none',
+    backgroundColor: 'transparent',
 
   },
 });

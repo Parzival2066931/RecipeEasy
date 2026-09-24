@@ -1,18 +1,20 @@
-import { StyleSheet, Text, Pressable, View } from 'react-native';
+import { StyleSheet, Text, Pressable, View, Alert } from 'react-native';
 import { RadioButton, RadioGroup } from 'react-native-radio-buttons-group';
 import { Field } from '../components/Field';
 import { CustomPicker } from '../components/CustomPicker';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SubmitButton } from '../components/SubmitButton';
 
 export function RecipeForm({navigation, route}) {
+  const display = route.params
+
 
   const [recipe, setRecipe] = useState({
-    categorie: null,
-    name: '',
-    hours: 0,
-    minutes: 0,
-    description: '',
+    categorie: display?.category || null,
+    name: display?.name || '',
+    hours: display?.durationHours || 0,
+    minutes: display?.durationMinutes || 0,
+    description: display?.description || '',
   })
 
   const hourValues = [...Array(13).keys()]
@@ -27,7 +29,37 @@ export function RecipeForm({navigation, route}) {
 
 
   function handleNavigation() {
-    navigation.popTo('RecipeList', recipe)
+    if(display) {
+      navigation.popTo('RecipeList')
+    }
+    else {
+      const errors = []
+      
+      if(recipe.name == "") {
+        errors.push("Nom requis")
+      }
+      if(recipe.categorie == null) {
+        errors.push("Catégorie requise")
+      }
+      if(recipe.hours == 0 && recipe.minutes == 0) {
+        errors.push("Durée supérieure à 0 requise")
+      }
+
+      if(errors.length != 0) {
+        Alert.alert("Erreur", errors.join("\n"))
+      }
+      else {
+        navigation.popTo('RecipeList', recipe)}
+    }
+  }
+
+  function buttonLabel() {
+    if(display) {
+      return "Delete"
+    }
+    else {
+      return "Save"
+    }
   }
   return (
     <View style={styles.container}>
@@ -79,7 +111,7 @@ export function RecipeForm({navigation, route}) {
       />
 
       <View style={styles.saveContainer}>
-        <SubmitButton label="Save" onPress={handleNavigation}/>
+        <SubmitButton label={buttonLabel()} onPress={handleNavigation}/>
       </View>
 
     </View>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LoginForm } from './forms/LoginForm';
 import { SignUpForm } from './forms/SingUpForm';
 import { RecipeForm } from './forms/RecipeForm';
@@ -11,57 +12,64 @@ import { RecipeList } from './forms/RecipeList';
 
 const Stack = createNativeStackNavigator();
 
+function AppNavigation() {
+    const insets = useSafeAreaInsets();
+    
+    return (
+        <View style={{ flex: 1, backgroundColor: 'red', paddingBottom: insets.bottom}}>
+
+            <Stack.Navigator 
+                initialRouteName="LoginForm"
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: '#3d1878'
+                    },
+                    headerTintColor: 'white',
+                }}
+            >
+
+                <Stack.Screen
+                    name="LoginForm"
+                    component={ LoginForm }
+                    options={{ title: 'Login' }}
+                />
+
+                <Stack.Screen
+                    name="SignUpForm"
+                    component={ SignUpForm }
+                    options={{ title: 'SignUp' }}
+                />
+
+                <Stack.Screen
+                    name="RecipeForm"
+                    component={ RecipeForm }
+                    options={{ title: 'Recipe' }}
+                />
+
+                <Stack.Screen
+                    name="RecipeList"
+                    component={ RecipeList }
+                    options={{ 
+                        title: 'Recipes',
+                    }}
+                />
+
+
+            </Stack.Navigator>
+        </View>
+    )
+}
+
 export default function App() {
     return (
-        <>
+        <SafeAreaProvider>
             <StatusBar style="light"/>
 
-            <View style={{ flex: 1, backgroundColor: 'red' }}>
             {/* View wrapper si backgroundColor dans les components enfants */}
-                <NavigationContainer>
-                    <Stack.Navigator 
-                        initialRouteName="LoginForm"
-                        screenOptions={{
-                            headerStyle: {
-                                backgroundColor: '#3d1878'
-                            },
-                            headerTintColor: 'white',
-                            
-
-                        }}
-                    >
-
-                        <Stack.Screen
-                            name="LoginForm"
-                            component={ LoginForm }
-                            options={{ title: 'Login' }}
-                        />
-
-                        <Stack.Screen
-                            name="SignUpForm"
-                            component={ SignUpForm }
-                            options={{ title: 'SignUp' }}
-                        />
-
-                        <Stack.Screen
-                            name="RecipeForm"
-                            component={ RecipeForm }
-                            options={{ title: 'Recipe' }}
-                        />
-
-                        <Stack.Screen
-                            name="RecipeList"
-                            component={ RecipeList }
-                            options={{ 
-                                title: 'Recipes',
-                            }}
-                        />
-
-
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </View>
-        </>
+            <NavigationContainer>
+                <AppNavigation/>
+            </NavigationContainer>
+        </SafeAreaProvider>
     );
 }
 
