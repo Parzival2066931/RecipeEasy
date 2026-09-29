@@ -21,7 +21,7 @@ export function RecipeForm({navigation, route}) {
   const minuteValues = [...Array(60).keys()]
   const categories_labels = ['Breakfast', 'Lunch', 'Dinner']
   const categories = categories_labels.map((categorie, index) => ({
-    id: index,
+    id: index, //voir si bd commence à 1 ou 0
     label: categorie,
     value: index,
     color: 'white'
