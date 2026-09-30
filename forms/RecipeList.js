@@ -1,7 +1,8 @@
-import { BackHandler, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, StyleSheet, Text, View, FlatList } from 'react-native';
 import { SubmitButton } from '../components/SubmitButton';
 import { useEffect, useState  } from 'react';
 import { LoginForm } from './LoginForm';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
@@ -20,6 +21,9 @@ export function RecipeList({navigation, route}) {
     description: display?.description
   }
 
+  const categoryIcons = ["coffee", "hamburger", "blender"]
+
+
   
   useEffect(() => {
     if (display) {
@@ -37,17 +41,34 @@ export function RecipeList({navigation, route}) {
   }, [])
 
 
-  function list() {
+  function list(recipe) {
+    console.log(recipe)
     return (
-      <Text style={ styles.text }>
-        { JSON.stringify(recipes) }
-      </Text>
-    )
+      <View style={{ flexDirection: 'row', width: '100%' }}>
+
+        <View style={{ flex: 1 }}>
+          <MaterialCommunityIcons
+            name={categoryIcons[recipe.category]}
+            size={40}
+            color="white"
+          />
+
+          <Text style={styles.text}>
+            {recipe.durationHours + "h" + recipe.durationMinutes}
+          </Text>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <Text style={styles.text}>{recipe.name}</Text>
+          <Text style={styles.text}>{recipe.description ?? ""}</Text>
+        </View>
+      </View>
+    );
   }
-  function handleUpdateRecipe() {
-    let randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
-    navigation.navigate('RecipeForm', randomRecipe)
-  }
+  // function handleUpdateRecipe() {
+  //   let randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+  //   navigation.navigate('RecipeForm', randomRecipe)
+  // }
 
   function handleAddRecipe() {
     navigation.navigate('RecipeForm')
@@ -55,15 +76,20 @@ export function RecipeList({navigation, route}) {
   return(
     <View style={[styles.container,]}>
       <View style={styles.content}>
-        { list() }
+        <FlatList
+          style={{ width: '100%' }}
+          data={recipes}
+          renderItem={({ item: recipe }) => list(recipe)}
+          ListEmptyComponent={<Text>No recipes yet...</Text>}
+        />
       </View>
 
       <View style={styles.buttonContainer}>
-        <SubmitButton
+        {/* <SubmitButton
           textStyle={styles.buttonText}
           label="View"
           onPress={handleUpdateRecipe}
-        />
+        /> */}
         <SubmitButton
           style={styles.button}
           textStyle={styles.buttonText}
@@ -100,8 +126,8 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
 
     backgroundColor: 'orange',
     borderRadius: 35,
@@ -112,7 +138,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 15,
   },
 
   logout: {

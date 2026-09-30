@@ -16,7 +16,7 @@ function AppNavigation() {
     const insets = useSafeAreaInsets();
     
     return (
-        <View style={{ flex: 1, backgroundColor: 'red', paddingBottom: insets.bottom}}>
+        <View style={{ flex: 1, paddingBottom: insets.bottom}}>
 
             <Stack.Navigator 
                 initialRouteName="LoginForm"
