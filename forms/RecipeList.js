@@ -21,7 +21,7 @@ export function RecipeList({navigation, route}) {
     description: display?.description
   }
 
-  const categoryIcons = ["coffee", "hamburger", "blender"]
+  const categoryIcons = ["coffee", "hamburger", "pasta"]
 
 
   
