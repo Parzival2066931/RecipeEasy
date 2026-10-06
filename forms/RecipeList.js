@@ -89,14 +89,7 @@ export function RecipeList({navigation, route}) {
   
   useEffect(() => {
     if (display) {
-      setRecipes(previousRecipes => [...previousRecipes, recipe].sort((a, b) => {
-          if (a.category !== b.category) {
-            return a.category - b.category
-          }
-
-          return a.name.localeCompare(b.name)
-        })
-      )
+      setRecipes(previousRecipes => sortRecipes([...previousRecipes, recipe]))
     }
   }, [display]);
 
