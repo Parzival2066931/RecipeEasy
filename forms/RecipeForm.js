@@ -29,38 +29,27 @@ export function RecipeForm({navigation, route}) {
 
 
   function handleNavigation() {
-    if(display) {
-      navigation.popTo('RecipeList')
+
+    const errors = []
+    
+    if(recipe.name == "") {
+      errors.push("Nom requis")
+    }
+    if(recipe.categorie == null) {
+      errors.push("Catégorie requise")
+    }
+    if(recipe.hours == 0 && recipe.minutes == 0) {
+      errors.push("Durée supérieure à 0 requise")
+    }
+
+    if(errors.length != 0) {
+      Alert.alert("Erreur", errors.join("\n"))
     }
     else {
-      const errors = []
-      
-      if(recipe.name == "") {
-        errors.push("Nom requis")
-      }
-      if(recipe.categorie == null) {
-        errors.push("Catégorie requise")
-      }
-      if(recipe.hours == 0 && recipe.minutes == 0) {
-        errors.push("Durée supérieure à 0 requise")
-      }
-
-      if(errors.length != 0) {
-        Alert.alert("Erreur", errors.join("\n"))
-      }
-      else {
-        navigation.popTo('RecipeList', recipe)}
+      navigation.popTo('RecipeList', recipe)
     }
   }
 
-  function buttonLabel() {
-    if(display) {
-      return "Delete"
-    }
-    else {
-      return "Save"
-    }
-  }
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
@@ -111,7 +100,23 @@ export function RecipeForm({navigation, route}) {
       />
 
       <View style={styles.saveContainer}>
-        <SubmitButton label={buttonLabel()} onPress={handleNavigation}/>
+
+        {!display &&
+          <SubmitButton
+            label="Save"
+            onPress={handleNavigation}
+          />
+        }
+
+        {display &&
+          <SubmitButton
+            label="Delete"
+            onPress={() => navigation.popTo('RecipeList')}
+            style={styles.deleteButton}
+            textStyle={styles.deleteText}
+          />
+        }
+
       </View>
 
     </View>
@@ -126,19 +131,32 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#367e7f',
   },
+
   descriptionContainer: {
     flex: 1,
     width: '100%',
   },
+
   durationRow: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
   saveContainer: {
     alignItems: 'center',
+    gap: 10,
   },
+
+  deleteButton: {
+    backgroundColor: '#dddddd',
+  },
+
+  deleteText: {
+    color: 'red',
+  },
+
   picker: {
     flex: 1,
     height: 50,
@@ -146,12 +164,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     border: 'none'
   },
+
   radio: {
     alignItems: 'center',
   },
+
   buttonLabel: {
     color: 'white',
   },
+
   text: {
     color: 'white',
     margin: 10

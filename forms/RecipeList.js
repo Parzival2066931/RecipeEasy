@@ -1,4 +1,4 @@
-import { BackHandler, StyleSheet, Text, View, FlatList } from 'react-native';
+import { BackHandler, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { SubmitButton } from '../components/SubmitButton';
 import { useEffect, useState  } from 'react';
 import { LoginForm } from './LoginForm';
@@ -42,27 +42,39 @@ export function RecipeList({navigation, route}) {
 
 
   function list(recipe) {
-    console.log(recipe)
     return (
-      <View style={{ flexDirection: 'row', width: '100%' }}>
-
-        <View style={{ flex: 1 }}>
+      <Pressable
+        onPress={() => navigation.navigate('RecipeForm', recipe)}
+        style={({ pressed }) => [
+          styles.recipeItem,
+          pressed && styles.recipePressed
+        ]}
+      >
+        <View style={styles.recipeLeft}>
           <MaterialCommunityIcons
             name={categoryIcons[recipe.category]}
-            size={40}
-            color="white"
+            size={28}
+            color="orange"
           />
 
-          <Text style={styles.text}>
-            {recipe.durationHours + "h" + recipe.durationMinutes}
+          <Text style={styles.duration}>
+            {recipe.durationHours}h{String(recipe.durationMinutes).padStart(2, '0')}
           </Text>
         </View>
 
-        <View style={{ flex: 1 }}>
-          <Text style={styles.text}>{recipe.name}</Text>
-          <Text style={styles.text}>{recipe.description ?? ""}</Text>
+        <View style={styles.recipeRight}>
+          <Text style={styles.recipeName}>
+            {recipe.name}
+          </Text>
+
+          <Text
+            style={styles.description}
+            numberOfLines={1}
+          >
+            {recipe.description ?? ''}
+          </Text>
         </View>
-      </View>
+      </Pressable>
     );
   }
   // function handleUpdateRecipe() {
@@ -77,19 +89,23 @@ export function RecipeList({navigation, route}) {
     <View style={[styles.container,]}>
       <View style={styles.content}>
         <FlatList
-          style={{ width: '100%' }}
+          style={styles.list}
+          contentContainerStyle={recipes.length === 0 && styles.emptyList}
           data={recipes}
-          renderItem={({ item: recipe }) => list(recipe)}
-          ListEmptyComponent={<Text>No recipes yet...</Text>}
+          renderItem={({ item }) => list(item)}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
+              No recipes yet...
+            </Text>
+          }
+          ItemSeparatorComponent={() => (
+            <View style={styles.separator} />
+          )}
         />
       </View>
 
       <View style={styles.buttonContainer}>
-        {/* <SubmitButton
-          textStyle={styles.buttonText}
-          label="View"
-          onPress={handleUpdateRecipe}
-        /> */}
         <SubmitButton
           style={styles.button}
           textStyle={styles.buttonText}
@@ -112,37 +128,92 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: '100%',
   },
 
-  text: {
-    fontSize: 25,
+  list: {
+    width: '100%',
+  },
+
+  recipeItem: {
+    flexDirection: 'row',
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 0,
+  },
+
+  recipePressed: {
+    backgroundColor: '#d9d9d9',
+  },
+
+  recipeLeft: {
+    width: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  recipeRight: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 2,
+  },
+
+  recipeName: {
     color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+  },
+
+  description: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 3,
+  },
+
+  duration: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 2,
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: '#b8d4d4',
+  },
+
+  emptyList: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+
+  emptyText: {
+    color: '#dddddd',
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 
   buttonContainer: {
     alignItems: 'flex-end',
+    paddingTop: 12,
   },
 
   button: {
     width: 60,
     height: 60,
-
     backgroundColor: 'orange',
-    borderRadius: 35,
-
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   buttonText: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 18,
   },
 
   logout: {
     backgroundColor: 'transparent',
-
   },
 });
