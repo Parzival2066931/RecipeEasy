@@ -1,8 +1,7 @@
 import { BackHandler, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { SubmitButton } from '../components/SubmitButton';
 import { useEffect, useState  } from 'react';
-import { LoginForm } from './LoginForm';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Recipe } from '../components/Recipe'
 
 
 
@@ -21,13 +20,31 @@ export function RecipeList({navigation, route}) {
     description: display?.description
   }
 
-  const categoryIcons = ["coffee", "hamburger", "pasta"]
-
-
+  const categories = [
+    {
+      icon: 'coffee',
+      color: '#f4c430'
+    },
+    {
+      icon: 'hamburger',
+      color: '#00ff66'
+    },
+    {
+      icon: 'pasta',
+      color: '#2222aa'
+    }
+  ]
   
   useEffect(() => {
     if (display) {
-      setRecipes((previousRecipes) => [...previousRecipes, recipe].sort((a, b) => a.name.localeCompare(b.name)));
+      setRecipes(previousRecipes => [...previousRecipes, recipe].sort((a, b) => {
+          if (a.category !== b.category) {
+            return a.category - b.category
+          }
+
+          return a.name.localeCompare(b.name)
+        })
+      )
     }
   }, [display]);
 
@@ -40,59 +57,25 @@ export function RecipeList({navigation, route}) {
     })
   }, [])
 
-
-  function list(recipe) {
-    return (
-      <Pressable
-        onPress={() => navigation.navigate('RecipeForm', recipe)}
-        style={({ pressed }) => [
-          styles.recipeItem,
-          pressed && styles.recipePressed
-        ]}
-      >
-        <View style={styles.recipeLeft}>
-          <MaterialCommunityIcons
-            name={categoryIcons[recipe.category]}
-            size={28}
-            color="orange"
-          />
-
-          <Text style={styles.duration}>
-            {recipe.durationHours}h{String(recipe.durationMinutes).padStart(2, '0')}
-          </Text>
-        </View>
-
-        <View style={styles.recipeRight}>
-          <Text style={styles.recipeName}>
-            {recipe.name}
-          </Text>
-
-          <Text
-            style={styles.description}
-            numberOfLines={1}
-          >
-            {recipe.description ?? ''}
-          </Text>
-        </View>
-      </Pressable>
-    );
-  }
-  // function handleUpdateRecipe() {
-  //   let randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
-  //   navigation.navigate('RecipeForm', randomRecipe)
-  // }
-
   function handleAddRecipe() {
     navigation.navigate('RecipeForm')
   }
+
   return(
+
     <View style={[styles.container,]}>
       <View style={styles.content}>
         <FlatList
           style={styles.list}
           contentContainerStyle={recipes.length === 0 && styles.emptyList}
           data={recipes}
-          renderItem={({ item }) => list(item)}
+          renderItem={({ item }) => 
+            <Recipe
+              recipe={item}
+              navigation={navigation}
+              categories={categories}
+            />
+          }
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
             <Text style={styles.emptyText}>
@@ -113,9 +96,7 @@ export function RecipeList({navigation, route}) {
           onPress={handleAddRecipe}
         />
       </View>
-      
     </View>
-      
   )
 }
 
