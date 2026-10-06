@@ -8,7 +8,59 @@ import { Recipe } from '../components/Recipe'
 
 export function RecipeList({navigation, route}) {
 
-  const [recipes, setRecipes] = useState([])
+  const [recipes, setRecipes] = useState(
+    sortRecipes([
+      {
+        category: 2,
+        name: 'Spaghetti',
+        durationHours: 0,
+        durationMinutes: 45,
+        description: 'Pâtes sauce tomate'
+      },
+      {
+        category: 0,
+        name: 'Waffles',
+        durationHours: 0,
+        durationMinutes: 20,
+        description: 'Gaufres maison'
+      },
+      {
+        category: 1,
+        name: 'Sandwich',
+        durationHours: 0,
+        durationMinutes: 15,
+        description: 'Sandwich jambon fromage'
+      },
+      {
+        category: 0,
+        name: 'Omelette',
+        durationHours: 0,
+        durationMinutes: 10,
+        description: 'Omelette aux légumes'
+      },
+      {
+        category: 2,
+        name: 'Lasagna',
+        durationHours: 1,
+        durationMinutes: 30,
+        description: 'Lasagne maison'
+      },
+      {
+        category: 1,
+        name: 'Burger',
+        durationHours: 0,
+        durationMinutes: 30,
+        description: 'Burger classique'
+      },
+      {
+        category: 0,
+        name: 'Céréal',
+        durationHours: 0,
+        durationMinutes: 5,
+        description: 'Céréales et lait'
+      }
+    ])
+  )
 
   const display = route.params
 
@@ -56,6 +108,17 @@ export function RecipeList({navigation, route}) {
         <SubmitButton label='Log out' style={styles.logout} onPress={() => navigation.popTo('LoginForm')}/>
     })
   }, [])
+
+
+  function sortRecipes(recipes) {
+    return [...recipes].sort((a, b) => {
+      if (a.category !== b.category) {
+        return a.category - b.category
+      }
+
+      return a.name.localeCompare(b.name)
+    })
+  }
 
   function handleAddRecipe() {
     navigation.navigate('RecipeForm')
